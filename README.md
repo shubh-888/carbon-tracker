@@ -112,8 +112,8 @@ const flightEmission = flight * 0.15;
 
 **Shubham Maddhesiya**
 
-* 💼 LinkedIn:[ https://linkedin.com/in/your-profile](https://www.linkedin.com/in/shubham-maddhesiya-bb0031314/)
-* 📧 Email: [your-email@example.com](mailto:shubhammaddhesiya888@gmail.com)
+* 💼 LinkedIn:[ https://linkedin.com/in/shubham-maddhesiya-bb0031314]
+
 
 ---
 
