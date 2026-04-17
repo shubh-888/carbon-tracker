@@ -1,128 +1,218 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import BadgeUnlock from "../components/BadgeUnlock";
+import Layout from "../components/Layout";
 import { db, auth } from "../firebase/firebaseConfig";
+
 import {
 collection,
-getDocs,
 doc,
 setDoc,
 getDoc,
-updateDoc
+onSnapshot,
+query,
+where,
+getDocs
 } from "firebase/firestore";
 
-export default function DailyTasks(){
+import { onAuthStateChanged } from "firebase/auth";
+import { motion } from "framer-motion";
+
+export default function DailyTasks() {
 
 const [tasks,setTasks] = useState([]);
-const [earnedBadge,setEarnedBadge] = useState(null);
-const user = auth.currentUser;
+const [completed,setCompleted] = useState({});
+const [userData,setUserData] = useState(null);
+const [user,setUser] = useState(null);
+const [loading,setLoading] = useState(true);
+const [newBadge,setNewBadge] = useState(null);
+
+const todayKey = new Date().toISOString().split("T")[0];
 
 useEffect(()=>{
+const unsub = onAuthStateChanged(auth,(u)=>{
+if(u){
+setUser(u);
+setLoading(false);
+}
+});
+return ()=>unsub();
+},[]);
 
-async function loadTasks(){
+useEffect(()=>{
+if(!user) return;
 
-const snapshot = await getDocs(collection(db,"tasks"));
-
-let arr = [];
-
+const unsub = onSnapshot(collection(db,"tasks"),(snapshot)=>{
+let arr=[];
 snapshot.forEach(doc=>{
 arr.push({id:doc.id,...doc.data()});
 });
-
 setTasks(arr);
-
-}
-
-loadTasks();
-
-},[]);
-
-const completeTask = async(task)=>{
-
-  
-
-const taskRef = doc(db,"userTasks",user.uid+"_"+task.id);
-
-
-const taskSnap = await getDoc(taskRef);
-
-if(taskSnap.exists()){
-toast.error("Task already completed today");
-return;
-}
-await setDoc(taskRef,{
-userId:user.uid,
-taskId:task.id,
-completed:true
 });
 
-/* Update points */
+return ()=>unsub();
 
-const userRef = doc(db,"users",user.uid);
-const userSnap = await getDoc(userRef);
+},[user]);
 
-let userData = userSnap.data();
+useEffect(()=>{
 
-let newPoints = (userData.points || 0) + task.points;
+if(!user) return;
 
-let newBadges = userData.badges || [];
+const loadUser = async()=>{
 
-if(!newBadges.includes(task.badge)){
-newBadges.push(task.badge);
-}
+const ref = doc(db,"users",user.uid);
+const snap = await getDoc(ref);
 
-await updateDoc(userRef,{
-points:newPoints,
-badges:newBadges
+if(!snap.exists()){
+
+await setDoc(ref,{
+points:0,
+streak:0,
+badges:[],
+lastTaskDate:null
 });
 
-setEarnedBadge(task.badge);
-toast.success("Task completed!");
+setUserData({
+points:0,
+streak:0,
+badges:[]
+});
+
+}else{
+setUserData(snap.data());
+}
 
 };
 
+loadUser();
+
+},[user]);
+
+useEffect(()=>{
+
+if(!user) return;
+
+const loadCompleted = async()=>{
+
+const q = query(
+collection(db,"userTasks"),
+where("userId","==",user.uid),
+where("date","==",todayKey)
+);
+
+const snap = await getDocs(q);
+
+let map={};
+
+snap.forEach(d=>{
+map[d.data().taskId]=true;
+});
+
+setCompleted(map);
+
+};
+
+loadCompleted();
+
+},[user]);
+
+const completeTask = async(task)=>{
+
+if(completed[task.id]) return;
+
+const uid = auth.currentUser.uid;
+const id = `${uid}_${task.id}_${todayKey}`;
+
+await setDoc(doc(db,"userTasks",id),{
+userId:uid,
+taskId:task.id,
+date:todayKey,
+completed:true
+});
+
+toast.success(`+${task.points} XP 🚀`);
+
+setCompleted(prev=>({...prev,[task.id]:true}));
+
+};
+
+if(loading){
+
 return(
 
-<div className="max-w-3xl mx-auto space-y-6">
+<Layout>
 
-<h1 className="text-2xl font-bold">
-Daily Eco Tasks
+<div className="flex items-center justify-center min-h-screen dark:text-white">
+Loading tasks...
+</div>
+
+</Layout>
+
+);
+
+}
+
+return(
+
+<Layout>
+
+<div className="w-full px-4 md:px-8 py-6 space-y-6">
+
+<h1 className="text-2xl md:text-3xl font-bold text-green-700 dark:text-green-400">
+🌱 Daily Sustainability Tasks
 </h1>
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
 {tasks.map(task=>(
 
-<div
+<motion.div
 key={task.id}
-className="bg-white dark:bg-gray-800 p-6 rounded shadow flex justify-between"
+whileHover={{scale:1.04}}
+className="bg-white dark:bg-gray-800
+p-5 rounded-2xl shadow
+flex justify-between items-center"
 >
 
 <div>
 
-<h3 className="font-semibold">
+<h3 className="font-semibold text-lg">
 {task.title}
 </h3>
 
 <p className="text-sm text-gray-500">
-Reward: {task.points} points
++{task.points} XP
 </p>
 
 </div>
 
 <button
 onClick={()=>completeTask(task)}
-className="bg-green-600 text-white px-4 py-2 rounded"
+disabled={completed[task.id]}
+className={`px-4 py-2 rounded-xl transition font-medium
+
+${completed[task.id]
+? "bg-gray-400 cursor-not-allowed"
+: "bg-green-600 hover:bg-green-700 text-white"}
+
+`}
 >
-Complete
+
+{completed[task.id] ? "Done ✅" : "Complete"}
+
 </button>
 
-</div>
+</motion.div>
 
 ))}
 
-{/* Badge animation */}
-<BadgeUnlock badge={earnedBadge} />
+</div>
+
+{newBadge && <BadgeUnlock badge={newBadge} />}
 
 </div>
 
-)
+</Layout>
+
+);
 }

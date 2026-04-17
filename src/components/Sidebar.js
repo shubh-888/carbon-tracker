@@ -1,85 +1,83 @@
 import { NavLink } from "react-router-dom";
-import { FaTasks } from "react-icons/fa";
 import {
 FaChartLine,
 FaHistory,
-FaUser,
-FaTrophy
+FaTrophy,
+FaTasks,
+FaCalculator
 } from "react-icons/fa";
 
-export default function Sidebar(){
+export default function Sidebar({ closeSidebar }) {
 
-const linkClass =
-"flex items-center gap-3 p-3 rounded hover:bg-green-700";
+const linkClass = ({ isActive }) =>
+`flex items-center gap-3 px-4 py-3 rounded-lg transition text-sm
+${isActive
+? "bg-green-600 text-white"
+: "text-green-100 hover:bg-green-700"}`;
 
-const activeClass =
-"bg-green-700";
+return (
 
-return(
+<div className="w-64 h-full bg-green-800 text-white flex flex-col">
 
-<div className="w-64 bg-green-800 text-white min-h-screen p-6">
+{/* HEADER */}
 
-<h2 className="font-bold text-lg mb-8">
-Dashboard
+<div className="px-6 py-6 border-b border-green-700">
+
+<h2 className="text-lg font-semibold">
+EcoTrack Dashboard
 </h2>
 
-<nav className="space-y-2">
+</div>
+
+
+{/* MENU */}
+
+<nav className="flex flex-col gap-2 px-4 py-6">
 
 <NavLink
 to="/dashboard"
-className={({isActive}) =>
-`${linkClass} ${isActive ? activeClass : ""}`
-}
+onClick={closeSidebar}
+className={linkClass}
 >
-<FaChartLine/>
-Dashboard
+<FaChartLine/> Dashboard
 </NavLink>
 
 <NavLink
 to="/history"
-className={({isActive}) =>
-`${linkClass} ${isActive ? activeClass : ""}`
-}
+onClick={closeSidebar}
+className={linkClass}
 >
-<FaHistory/>
-History
+<FaHistory/> History
 </NavLink>
 
 <NavLink
 to="/leaderboard"
-className={({isActive}) =>
-`${linkClass} ${isActive ? activeClass : ""}`
-}
+onClick={closeSidebar}
+className={linkClass}
 >
-<FaTrophy/>
-Leaderboard
+<FaTrophy/> Leaderboard
 </NavLink>
-
 
 <NavLink
 to="/tasks"
-className={({isActive}) =>
-`${linkClass} ${isActive ? activeClass : ""}`
-}
+onClick={closeSidebar}
+className={linkClass}
 >
-<FaTasks/>
-Daily Tasks
+<FaTasks/> Daily Tasks
 </NavLink>
 
 <NavLink
-to="/profile"
-className={({isActive}) =>
-`${linkClass} ${isActive ? activeClass : ""}`
-}
+to="/calculator"
+onClick={closeSidebar}
+className={linkClass}
 >
-<FaUser/>
-Profile
+<FaCalculator/> Calculator
 </NavLink>
 
 </nav>
 
 </div>
 
-)
+);
 
 }

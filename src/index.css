@@ -6,7 +6,6 @@ body{
 font-family: 'Inter', sans-serif;
 background:#f5f7f6;
 }
-
 .card{
 background:white;
 border-radius:12px;
@@ -17,9 +16,15 @@ padding:24px;
 .green-btn{
 background:#2f8f5b;
 color:white;
-padding:10px 20px;
+padding:10px 16px;
 border-radius:6px;
 font-weight:500;
+}
+
+@media (min-width:640px){
+.green-btn{
+padding:12px 24px;
+}
 }
 
 .green-btn:hover{
@@ -47,4 +52,60 @@ padding: 24px;
 
 .dark .glass-card{
 background: rgba(40,40,40,0.6);
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px) rotate(5deg);
+  }
+  50% {
+    transform: translateY(-40px) translateX(-10px) rotate(-5deg);
+  }
+  75% {
+    transform: translateY(-20px) translateX(10px) rotate(3deg);
+  }
+  100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+}
+.input {
+  @apply w-full p-3 rounded-lg border outline-none transition;
+
+  /* Light */
+  @apply bg-white text-black border-gray-300;
+
+  /* Dark */
+  @apply dark:bg-gray-900 dark:text-white dark:border-gray-600;
+
+  /* Focus */
+  @apply focus:ring-2 focus:ring-green-500;
+}
+
+/* GLOBAL PAGE CONTAINER */
+
+.page{
+  @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* GLOBAL SECTION SPACING */
+
+.section{
+  @apply py-8 sm:py-10 lg:py-12;
+}
+
+/* RESPONSIVE GRID */
+
+.grid-responsive{
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+body{
+overflow-x:hidden;
+}
+img,canvas,svg{
+max-width:100%;
+height:auto;
 }

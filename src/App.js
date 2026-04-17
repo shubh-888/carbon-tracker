@@ -1,120 +1,164 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
+import AnimatedBackground from "./components/AnimatedBackground";
+
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import DailyTasks from "./pages/DailyTasks";
+import VerifyEmail from "./pages/VerifyEmail";
+import ResetPassword from "./pages/ResetPassword";
+import CarbonGlobe from "./pages/CarbonGlobe";
+import Dashboard from "./pages/Dashboard";
 import Calculator from "./pages/Calculator";
 import Results from "./pages/Results";
-import Dashboard from "./pages/Dashboard";
 import History from "./pages/History";
 import Leaderboard from "./pages/Leaderboard";
 import Profile from "./pages/Profile";
+import Social from "./pages/Social";
+import DailyTasks from "./pages/DailyTasks";
+import EcoAssistantPage from "./pages/EcoAssistantPage";
+
+/* Layout Wrapper */
+
+function LayoutWrapper({ children }) {
+  return (
+    <main className="w-full min-h-screen pt-20 sm:pt-24">
+      {children}
+    </main>
+  );
+}
+
+
+/* App */
 
 function App() {
 
-return (
+  return (
 
-<AuthProvider>
-<Router>
+    <AuthProvider>
 
-<div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white">
+      <Router>
 
-<Navbar />
+        {/* Global Animated Background */}
+        <AnimatedBackground />
+
+        <div className="min-h-screen w-full text-gray-800 dark:text-white overflow-x-hidden">
+
+          <Navbar />
+
+          <Toaster position="top-right" />
+
+          <LayoutWrapper>
+
+            <Routes>
+
+              {/* Public Routes */}
+
+              <Route path="/" element={<Home />} />
+              <Route path="/globe" element={<CarbonGlobe />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/verify-email" element={<VerifyEmail />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
 
 
-<Toaster position="top-right"/>
-<div className="max-w-7xl mx-auto p-6">
+              {/* Protected Routes */}
 
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
 
+              <Route
+                path="/calculator"
+                element={
+                  <ProtectedRoute>
+                    <Calculator />
+                  </ProtectedRoute>
+                }
+              />
 
-<Routes>
+              <Route
+                path="/results"
+                element={
+                  <ProtectedRoute>
+                    <Results />
+                  </ProtectedRoute>
+                }
+              />
 
-{/* Public Routes */}
+              <Route
+                path="/history"
+                element={
+                  <ProtectedRoute>
+                    <History />
+                  </ProtectedRoute>
+                }
+              />
 
-<Route path="/" element={<Home />} />
-<Route path="/login" element={<Login />} />
-<Route path="/register" element={<Register />} />
-
-{/* Protected Routes */}
-
-<Route
-path="/calculator"
+              <Route
+                path="/leaderboard"
+                element={
+                  <ProtectedRoute>
+                    <Leaderboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+path="/eco-ai"
 element={
 <ProtectedRoute>
-<Calculator />
+<EcoAssistantPage />
 </ProtectedRoute>
 }
 />
 
-<Route
-path="/results"
-element={
-<ProtectedRoute>
-<Results />
-</ProtectedRoute>
-}
-/>
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
 
-<Route
-path="/dashboard"
-element={
-<ProtectedRoute>
-<Dashboard />
-</ProtectedRoute>
-}
-/>
+              <Route
+                path="/social"
+                element={
+                  <ProtectedRoute>
+                    <Social />
+                  </ProtectedRoute>
+                }
+              />
 
-<Route
-path="/history"
-element={
-<ProtectedRoute>
-<History />
-</ProtectedRoute>
-}
-/>
+              <Route
+                path="/tasks"
+                element={
+                  <ProtectedRoute>
+                    <DailyTasks />
+                  </ProtectedRoute>
+                }
+              />
 
-<Route
-path="/leaderboard"
-element={
-<ProtectedRoute>
-<Leaderboard />
-</ProtectedRoute>
-}
-/>
+            </Routes>
 
-<Route
-path="/profile"
-element={
-<ProtectedRoute>
-<Profile />
-</ProtectedRoute>
-}
-/>
+          </LayoutWrapper>
 
-<Route
-path="/tasks"
-element={
-<ProtectedRoute>
-<DailyTasks/>
-</ProtectedRoute>
-}
-/>
+        </div>
 
-</Routes>
+      </Router>
 
-</div>
+    </AuthProvider>
 
-</div>
-
-</Router>
-</AuthProvider>
-
-);
-
+  );
 }
 
 export default App;
