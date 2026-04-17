@@ -1,61 +1,59 @@
-# 🌱 EcoTrack – Carbon Footprint Tracker
+# 🌱 Carbon Tracker – Smart Carbon Footprint Analyzer
 
-![React](https://img.shields.io/badge/Frontend-React-blue)
-![Firebase](https://img.shields.io/badge/Backend-Firebase-orange)
-![Status](https://img.shields.io/badge/Status-Active-success)
+## 🚀 Overview
 
----
+Carbon Tracker is a full-stack web application that helps users monitor, analyze, and reduce their carbon footprint based on daily activities like electricity usage, transportation, and lifestyle habits.
 
-## 🚀 Live Demo
-
-👉 https://your-live-link.com
-
----
-
-## 📌 Overview
-
-EcoTrack is a smart web application that helps users **track, analyze, and reduce their carbon footprint** based on daily activities like electricity usage, transport, and flights.
+The application integrates **machine learning predictions** with interactive dashboards to provide meaningful insights and suggestions.
 
 ---
 
 ## ✨ Features
 
-* 🔐 Secure Authentication (Firebase Auth)
-* 📊 Carbon Footprint Calculator
-* 🚗 Transport Emission Tracking
-* ⚡ Electricity Usage Monitoring
-* ☁️ Real-time Data Storage (Firestore)
-* 📱 Fully Responsive UI
+* 🔐 User Authentication (Firebase Auth)
+* 📊 Carbon Footprint Calculation
+* 🤖 ML-based Carbon Emission Prediction
+* 📈 Interactive Charts & Dashboard
+* 🚗 Transport & Electricity Tracking
+* 🧾 History & Reports
+* 🌐 Responsive UI
 
 ---
 
 ## 🛠️ Tech Stack
 
-* **Frontend:** React.js, HTML, CSS, JavaScript
-* **Backend:** Firebase (Auth, Firestore, Storage)
+* **Frontend:** React.js, Tailwind CSS
+* **Backend:** Node.js / Python (ML Server)
+* **Database:** Firebase Firestore
+* **ML Model:** Scikit-learn (`model.pkl`)
 * **Tools:** Git, GitHub
 
 ---
 
-## 📸 Screenshots
+## ⚙️ How It Works
 
-### 🔹 Dashboard
-
-![Dashboard](https://via.placeholder.com/800x400?text=Dashboard+Screenshot)
-
-### 🔹 Carbon Calculation
-
-![Calculator](https://via.placeholder.com/800x400?text=Carbon+Calculator)
+1. User inputs daily activity data
+2. Frontend sends data to backend API
+3. ML model processes input and predicts carbon emission
+4. Results are displayed using charts and analytics
 
 ---
 
-## ⚙️ Setup Instructions
+## 📦 Project Structure
+
+* `src/` → Frontend (React components, pages)
+* `ml-server/` → ML model and API
+* `public/` → Static assets
+
+---
+
+## ▶️ Run Locally
 
 ### 1️⃣ Clone Repository
 
 ```bash
-git clone https://github.com/your-username/EcoTrack.git
-cd EcoTrack
+git clone https://github.com/shubh-888/carbon-tracker.git
+cd carbon-tracker
 ```
 
 ### 2️⃣ Install Dependencies
@@ -66,25 +64,33 @@ npm install
 
 ### 3️⃣ Setup Environment Variables
 
-Create `.env` file:
+Create a `.env` file:
 
 ```env
 REACT_APP_API_KEY=your_api_key
 REACT_APP_AUTH_DOMAIN=your_auth_domain
 REACT_APP_PROJECT_ID=your_project_id
+REACT_APP_OPENAI_KEY=your_openai_key
 ```
 
-### 4️⃣ Run Project
+### 4️⃣ Run Frontend
 
 ```bash
 npm start
+```
+
+### 5️⃣ Run ML Server
+
+```bash
+cd ml-server
+python main.py
 ```
 
 ---
 
 ## 📊 Carbon Calculation Logic
 
-```javascript
+```js
 const electricityEmission = electricity * 0.82;
 const carEmission = car * 0.21;
 const transportEmission = publicTransport * 0.11;
@@ -95,10 +101,10 @@ const flightEmission = flight * 0.15;
 
 ## 🌍 Future Improvements
 
-* 📈 Graphs & Analytics
-* 🤖 AI-based Suggestions
-* 📊 Monthly Reports
-* 🌐 Firebase Hosting Deployment
+* 📈 Advanced analytics dashboard
+* 🤖 Improved ML model accuracy
+* ☁️ Deployment (AWS / Firebase Hosting)
+* 🔔 Real-time notifications
 
 ---
 
